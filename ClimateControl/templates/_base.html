@@ -1,0 +1,16 @@
+{% extends 'django_bootstrap5/bootstrap5.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block bootstrap5_extra_head %}
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+{% endblock %}
+
+{% block bootstrap5_content %}
+    <div class="container p-4">
+        {% bootstrap_messages %}
+        {% block content %}
+        {% endblock %}
+    </div>
+{% endblock %}
