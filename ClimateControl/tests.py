@@ -26,15 +26,18 @@ class LoginTest(TestCase):
 
     def test_nonexist_username(self):
         resp = self.client.post('/login/', {'username': 'NOTEXISTED', 'password': '@123ABCdef'})
-        self.assertFormError(resp, 'form', None, ['Please enter a correct username and password. Note that both fields may be case-sensitive.'])
+        self.assertFormError(resp, 'form', None, [
+            'Please enter a correct username and password. Note that both fields may be case-sensitive.'])
 
     def test_incorrect_password1(self):
         resp = self.client.post('/login/', {'username': 'ABC12345', 'password': 'abcd'})
-        self.assertFormError(resp, 'form', None, ['Please enter a correct username and password. Note that both fields may be case-sensitive.'])
+        self.assertFormError(resp, 'form', None, [
+            'Please enter a correct username and password. Note that both fields may be case-sensitive.'])
 
     def test_incorrect_password2(self):
         resp = self.client.post('/login/', {'username': 'ABC12345', 'password': 'P@SSw0rd'})
-        self.assertFormError(resp, 'form', None, ['Please enter a correct username and password. Note that both fields may be case-sensitive.'])
+        self.assertFormError(resp, 'form', None, [
+            'Please enter a correct username and password. Note that both fields may be case-sensitive.'])
 
 
 class PasswordResetTest(TestCase):
@@ -52,12 +55,45 @@ class PasswordResetTest(TestCase):
 
     def test_oldpassword_incorrect1(self):
         resp = self.client.post('/reset/', {'old_password': 'ERR', 'new_password1': '@123ABCdef'})
-        self.assertFormError(resp, 'form', 'old_password', ['Your old password was entered incorrectly. Please enter it again.'])
+        self.assertFormError(resp, 'form', 'old_password',
+                             ['Your old password was entered incorrectly. Please enter it again.'])
 
     def test_oldpassword_incorrect2(self):
         resp = self.client.post('/reset/', {'old_password': 'Wr0ngP@ss', 'new_password1': '@123ABCdef'})
-        self.assertFormError(resp, 'form', 'old_password', ['Your old password was entered incorrectly. Please enter it again.'])
+        self.assertFormError(resp, 'form', 'old_password',
+                             ['Your old password was entered incorrectly. Please enter it again.'])
 
     def test_newpassword_incorrect(self):
         resp = self.client.post('/reset/', {'old_password': '@123ABCdef', 'new_password1': 'abcd'})
-        self.assertFormError(resp, 'form', 'new_password1', ['This password is too short. It must contain at least 8 characters.', 'This password must contain at least a symbol.'])
+        self.assertFormError(resp, 'form', 'new_password1',
+                             ['This password is too short. It must contain at least 8 characters.',
+                              'This password must contain at least a symbol.'])
+
+
+class CreateAccount(TestCase):
+    def setUp(self) -> None:
+        self.test_user = user.objects.create_user(username='ABC12345', is_admin=True, password='@123ABCdef')
+        self.client = Client()
+
+    def tearDown(self) -> None:
+        self.test_user.delete()
+
+    def test_account_created(self):
+        resp = self.client.post('/user/create/', {'username': 'ABC12346', 'password': '@123ABCdef'})
+        self.assertRedirects(resp, '/user/')
+
+    def test_null_username(self):
+        resp = self.client.post('/user/create/', {'username': '', 'password': '@123ABCdef'})
+        self.assertFormError(resp, 'form', 'username', ['This field is required.'])
+
+    def test_existing_username(self):
+        resp = self.client.post('/user/create/', {'username': 'ABC12345', 'password': '@123ABCdef'})
+        self.assertFormError(resp, 'form', 'username', ['A user with that username already exists.'])
+
+    def test_incorrect_password(self):
+        resp = self.client.post('/user/create/', {'username': 'ABC12346', 'password1': 'abcd'})
+        self.assertFormError(resp, 'form', 'password', ['This field is required.'])
+
+    def test_null_password(self):
+        resp = self.client.post('/user/create/', {'username': 'ABC12346', 'password1': ''})
+        self.assertFormError(resp, 'form', 'password', ['This field is required.'])

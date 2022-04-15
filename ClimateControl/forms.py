@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -27,4 +27,25 @@ class ResetPasswordForm(PasswordChangeForm):
 
     def clean_new_password1(self):
         password = self.cleaned_data.get('new_password1')
+        password_validation.validate_password(password, self.user)
+
+
+class CreateUserForm(UserCreationForm):
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=None, *args, **kwargs)
+        self.error_messages['username_incorrect'] = _('Username is incorrect.')
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if len(username) < 5:
+            raise ValidationError(
+                self.error_messages['username_incorrect'],
+                code='username_incorrect'
+            )
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+
         password_validation.validate_password(password, self.user)
