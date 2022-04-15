@@ -17,8 +17,8 @@
                 <td>{{ object.username }}</td>
                 <td>{{ object.is_admin }}</td>
                 <td>
-                    {% bootstrap_button 'UPDATE' button_type='link' button_class='btn-warning' %}
-                    {% bootstrap_button 'DELETE' button_type='link' button_class='btn-danger' %}
+                    <a href="{% url 'UserUpdate' object.pk %}">{% bootstrap_button 'UPDATE' button_type='link' button_class='btn-warning' %}</a>
+                    <a href="{% url 'UserDelete' object.pk %}">{% bootstrap_button 'DELETE' button_type='link' button_class='btn-danger' %}</a>
                 </td>
             </tr>
         {% endfor %}

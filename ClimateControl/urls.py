@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
-from .views import ResetPasswordView, IndexView, UserListView, UserCreateView
+from .views import ResetPasswordView, IndexView, UserListView, UserUpdateView, UserCreateView, UserDeleteView
 from .forms import LoginForm
 
 urlpatterns = [
@@ -10,4 +10,6 @@ urlpatterns = [
     path('reset/', ResetPasswordView.as_view(template_name='password_reset.html'), name='PasswordReset'),
     path('user/', UserListView.as_view(), name='UserList'),
     path('user/create/', UserCreateView.as_view(), name='UserCreate'),
+    path('user/update/<pk>/', UserUpdateView.as_view(), name='UserUpdate'),
+    path('user/delete/<pk>/', UserDeleteView.as_view(), name='UserDelete')
 ]
