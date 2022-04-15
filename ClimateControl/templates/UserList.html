@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+{% load django_bootstrap5 %}
+
+{% block bootstrap5_title %}UserList{% endblock %}
+
+{% block content %}
+    <a href="{% url 'UserCreate' %}">{% bootstrap_button 'CREATE' button_type='link' button_class='btn-primary' %}</a>
+    <table class="table table-hover">
+        <thead>
+        <th>Username</th>
+        <th>IsAdmin</th>
+        <th>#</th>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.username }}</td>
+                <td>{{ object.is_admin }}</td>
+                <td>
+                    {% bootstrap_button 'UPDATE' button_type='link' button_class='btn-warning' %}
+                    {% bootstrap_button 'DELETE' button_type='link' button_class='btn-danger' %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
