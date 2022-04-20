@@ -4,5 +4,10 @@
 {% block bootstrap5_title %}SCCS{% endblock %}
 
 {% block content %}
-    This is index page of SCCS.
+    <div>
+        Hi {{ request.user.username }}.
+    </div>
+    <div>
+        This is index page of SCCS.
+    </div>
 {% endblock %}

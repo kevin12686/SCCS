@@ -13,7 +13,7 @@ from .forms import ResetPasswordForm
 
 class ResetPasswordView(PasswordChangeView):
     form_class = ResetPasswordForm
-    template_name = 'password_reset.html'
+    template_name = 'PasswordReset.html'
 
     def get_success_url(self):
         messages.success(self.request, _('Password Changed'))
@@ -21,7 +21,7 @@ class ResetPasswordView(PasswordChangeView):
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
-    template_name = 'index.html'
+    template_name = 'Index.html'
 
 
 class UserListView(ListView):
@@ -51,7 +51,7 @@ class UserUpdateView(UpdateView):
 
 class UserDeleteView(DeleteView):
     model = get_user_model()
-    template_name = 'UserFrom.html'
+    template_name = 'UserDeleteConfirm.html'
 
     def get_success_url(self):
         messages.success(self.request, _('Account deleted'))

@@ -1,0 +1,21 @@
+{% extends '_base.html' %}
+{% load django_bootstrap5 %}
+
+{% block bootstrap5_title %}User Form{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-lg-4 offset-ld-4">
+            <h2 class="mb-4">Are you sure you want to delete "{{ object.username }}"</h2>
+            <a class="d-grid gap-2 text-decoration-none my-1" href="{% url 'UserList' %}">
+                {% bootstrap_button 'Back' button_type='link' button_class='btn-outline-dark' %}
+            </a>
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-grid gap-2 my-1">
+                    {% bootstrap_button 'Delete' button_type='submit' button_class='btn-danger' %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
