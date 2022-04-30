@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import ResetPasswordForm
+from .models import History
 
 
 # Create your views here.
@@ -56,3 +57,8 @@ class UserDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, _('Account deleted'))
         return reverse_lazy('UserList')
+
+
+class HistoryListView(ListView):
+    model = History
+    template_name = 'History.html'

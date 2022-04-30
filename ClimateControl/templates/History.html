@@ -1,0 +1,21 @@
+{% extends '_base.html' %}
+{% load django_bootstrap5 %}
+
+{% block bootstrap5_title %}UserList{% endblock %}
+
+{% block content %}
+    <table class="table table-hover">
+        <thead>
+        <th>Time</th>
+        <th>Temperature</th>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.time }}</td>
+                <td>{{ object.is_admin }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -33,27 +33,36 @@ class ClimateControlUser(AbstractBaseUser):
     username_validator = MinLengthValidator(5)
 
     username = models.CharField(
-        _("username"),
+        _('username'),
         max_length=150,
         unique=True,
         help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+            'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'
         ),
         validators=[username_validator],
         error_messages={
-            "unique": _("A user with that username already exists."),
+            'unique': _('A user with that username already exists.'),
         },
     )
     is_admin = models.BooleanField(
-        _("admin status"),
+        _('admin status'),
         default=False,
-        help_text=_("Designates whether the user can has admin permissions."),
+        help_text=_('Designates whether the user can has admin permissions.'),
     )
 
     objects = UserManager()
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = 'username'
 
     class Meta:
-        verbose_name = _("user")
-        verbose_name_plural = _("users")
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+
+class History(models.Model):
+    temperature = models.PositiveSmallIntegerField(verbose_name='Temperature')
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Time')
+
+    class Meta:
+        verbose_name = _('history')
+        verbose_name_plural = _('history')
