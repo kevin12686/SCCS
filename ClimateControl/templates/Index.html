@@ -4,10 +4,190 @@
 {% block bootstrap5_title %}SCCS{% endblock %}
 
 {% block content %}
+    <style>
+        form {
+            width: 300px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .value-button {
+            display: inline-block;
+            border: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            padding: 11px 0;
+            background: #eee;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .value-button:hover {
+            cursor: pointer;
+        }
+
+        form #decrease {
+            margin-right: -4px;
+            border-radius: 8px 0 0 8px;
+        }
+
+        form #increase {
+            margin-left: -4px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        form #input-wrap {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        input#number {
+            text-align: center;
+            border: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 40px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input#number1 {
+            text-align: center;
+            border: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 40px;
+        }
+
+        input#number2 {
+            text-align: center;
+            border: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+
     <div>
         Hi {{ request.user.username }}.
     </div>
     <div>
         Current Temperature: 73
     </div>
+
+    <form>
+        <div>
+            <p>Current Temperature </p>
+            <p><span id="current_temp" onload="CurrentTemp()"> </span> <span> F</span></p>
+            <input type="radio" name="mode" value="Auto" id="auto" checked onclick="auto_mode()">
+            <label for="auto">Auto</label>
+            <p></p>
+            <input type="radio" name="mode" value="Manual" id="manual" onclick=" manual_mode()">
+            <label for="manual">Manual</label>
+        </div>
+        <div id="Auto_mode">
+            <p>Change Temperature </p>
+            <div class="value-button" id="decrease1" onclick="decreaseValue()" value="Decrease Value">-</div>
+            <input type="number" id="number" value="72"/>
+            <div class="value-button" id="increase1" onclick="increaseValue()" value="Increase Value">+</div>
+        </div>
+        <div id="Manual_mode" hidden>
+            <p>Set Range: </p>
+            <p>Upper Temperature </p>
+            <div class="value-button" id="decrease2" onclick="decreaseValue1()" value="Decrease Value">-</div>
+            <input type="number" id="number1" value="72"/>
+            <div class="value-button" id="increase2" onclick="increaseValue1()" value="Increase Value">+</div>
+            <p>Lower Temperature </p>
+            <div class="value-button" id="decrease3" onclick="decreaseValue2()" value="Decrease Value">-</div>
+            <input type="number" id="number2" value="67"/>
+            <div class="value-button" id="increase3" onclick="increaseValue2()" value="Increase Value">+</div>
+        </div>
+    </form>
+    
+
+    <script>
+        function increaseValue() {
+            var value = parseInt(document.getElementById('number').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value > 89 ? value = 89 : '';
+            value++;
+            document.getElementById('number').value = value;
+        }
+
+        function decreaseValue() {
+            var value = parseInt(document.getElementById('number').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value < 51 ? value = 51 : '';
+            value--;
+            document.getElementById('number').value = value;
+        }
+
+        function decreaseValue1() {
+            var value1 = parseInt(document.getElementById('number1').value, 10);
+            var value2 = parseInt(document.getElementById('number2').value, 10);
+            value1 = isNaN(value1) ? 0 : value1;
+            value1 < value2 + 1 ? value1 = value2 + 1 : '';
+            value1--;
+            document.getElementById('number1').value = value1;
+        }
+
+        function increaseValue1() {
+            var value1 = parseInt(document.getElementById('number1').value, 10);
+            value1 = isNaN(value1) ? 0 : value1;
+            value1 > 89 ? value1 = 89 : '';
+            value1++;
+            document.getElementById('number1').value = value1;
+        }
+
+        function decreaseValue2() {
+            var value1 = parseInt(document.getElementById('number2').value, 10);
+            value1 = isNaN(value1) ? 0 : value1;
+            value1 < 51 ? value1 = 51 : '';
+            value1--;
+            document.getElementById('number2').value = value1;
+        }
+
+        function increaseValue2() {
+            var value1 = parseInt(document.getElementById('number2').value, 10);
+            var value2 = parseInt(document.getElementById('number1').value, 10);
+            value1 = isNaN(value1) ? 0 : value1;
+            value1 > value2 - 1 ? value1 = value2 - 1 : '';
+            value1++;
+            document.getElementById('number2').value = value1;
+        }
+
+        function manual_mode() {
+            document.getElementById("Auto_mode").style.display = 'none';
+            document.getElementById("Manual_mode").style.display = 'block';
+        }
+
+        function auto_mode() {
+            document.getElementById("Manual_mode").style.display = 'none';
+            document.getElementById("Auto_mode").style.display = 'block';
+        }
+
+        function CurrentTemp() {
+            document.getElementById("current_temp").innerHTML = Math.floor(Math.random() * 10 + 65);
+        }
+
+        window.onload = CurrentTemp;
+    </script>
 {% endblock %}
